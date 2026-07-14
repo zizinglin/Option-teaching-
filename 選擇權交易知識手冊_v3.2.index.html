@@ -1,0 +1,1157 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>選擇權交易知識手冊 v3.2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@600;700;900&family=Noto+Sans+TC:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#F5F7F8; --card:#FFFFFF; --ink:#1C2733; --ink-2:#4A5A68; --line:#DCE3E8;
+  --teal:#0E7C7B; --teal-soft:#E3F1F0;
+  --up-red:#C0392B; --red-soft:#FBEAE7;
+  --amber:#9A6B15; --amber-soft:#FBF3E2;
+  --navy:#274060; --navy-soft:#E8EEF6;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+  --serif:'Noto Serif TC',serif; --sans:'Noto Sans TC',-apple-system,sans-serif;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior:auto; } }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans);
+  font-size:15.5px; line-height:1.85; }
+
+/* ---------- masthead ---------- */
+.masthead { background:linear-gradient(135deg,#12333F 0%,#0E7C7B 100%); color:#F2FBFA;
+  padding:44px 24px 38px; }
+.masthead .inner { max-width:1200px; margin:0 auto; }
+.kicker { font-family:var(--mono); font-size:12px; letter-spacing:.28em; opacity:.85;
+  text-transform:uppercase; }
+.masthead h1 { font-family:var(--serif); font-weight:900; font-size:clamp(26px,4vw,40px);
+  margin:10px 0 14px; letter-spacing:.02em; }
+.badges { display:flex; flex-wrap:wrap; gap:8px; font-family:var(--mono); font-size:12.5px; }
+.badge { border:1px solid rgba(255,255,255,.45); border-radius:999px; padding:3px 12px; }
+.badge.solid { background:rgba(255,255,255,.16); }
+
+/* ---------- layout ---------- */
+.layout { max-width:1200px; margin:0 auto; display:grid; grid-template-columns:264px minmax(0,1fr);
+  gap:32px; padding:28px 24px 80px; }
+nav.toc { position:sticky; top:16px; align-self:start; max-height:calc(100vh - 32px);
+  overflow-y:auto; background:var(--card); border:1px solid var(--line); border-radius:12px;
+  padding:16px 14px; }
+nav.toc .toc-title { font-family:var(--mono); font-size:11.5px; letter-spacing:.22em;
+  color:var(--ink-2); margin:0 0 10px 6px; }
+nav.toc a { display:block; text-decoration:none; color:var(--ink-2); border-radius:7px;
+  padding:5px 8px; font-size:13px; line-height:1.45; }
+nav.toc a:hover { background:var(--teal-soft); color:var(--teal); }
+nav.toc a.toc-h2 { color:var(--ink); font-weight:700; margin-top:8px; }
+nav.toc a.toc-h3 { padding-left:20px; }
+main { min-width:0; }
+
+/* ---------- content ---------- */
+article { background:var(--card); border:1px solid var(--line); border-radius:14px;
+  padding:clamp(20px,4vw,48px); }
+h2 { font-family:var(--serif); font-weight:700; font-size:24px; margin:52px 0 16px;
+  padding:10px 16px; border-left:6px solid var(--navy); background:var(--navy-soft);
+  border-radius:0 10px 10px 0; }
+h2:first-child { margin-top:0; }
+h2.m-signal { border-left-color:#7A5FA0; background:#F0EBF8; }
+h2.m-strategy { border-left-color:var(--teal); background:var(--teal-soft); }
+h2.m-risk { border-left-color:var(--up-red); background:var(--red-soft); }
+h2.m-review { border-left-color:var(--amber); background:var(--amber-soft); }
+h2.m-appendix { border-left-color:#5B7386; background:#EDF1F4; }
+h3 { font-family:var(--serif); font-weight:700; font-size:18.5px; margin:38px 0 12px;
+  color:var(--navy); }
+h3::before { content:"§ "; color:var(--teal); font-family:var(--mono); font-weight:600; }
+p { margin:12px 0; }
+strong { color:#12333F; }
+hr { border:none; border-top:1px dashed var(--line); margin:36px 0; }
+li { margin:6px 0; }
+em { color:var(--ink-2); }
+
+/* ---------- tables ---------- */
+.table-wrap { overflow-x:auto; margin:18px 0; border:1px solid var(--line); border-radius:10px; }
+table { border-collapse:collapse; width:100%; font-size:14px; line-height:1.65; min-width:560px; }
+thead th { background:#12333F; color:#EDF6F5; font-weight:600; text-align:left;
+  padding:10px 14px; font-family:var(--sans); letter-spacing:.04em; white-space:nowrap; }
+tbody td { padding:10px 14px; border-top:1px solid var(--line); vertical-align:top; }
+tbody tr:nth-child(even) { background:#F4F8F9; }
+td:first-child { font-weight:700; color:var(--navy); white-space:nowrap; }
+table strong { color:var(--up-red); }
+
+/* ---------- 💡 example callouts ---------- */
+blockquote.example { margin:18px 0; padding:14px 18px 14px 20px; background:var(--amber-soft);
+  border:1px solid #EAD9B0; border-left:6px solid var(--amber); border-radius:0 12px 12px 0; }
+blockquote.example p { margin:6px 0; color:#5C4A1E; }
+blockquote.example strong { color:#7A5510; }
+
+/* ---------- changelog ---------- */
+details.changelog { background:var(--card); border:1px solid var(--line); border-radius:12px;
+  margin:0 0 16px; padding:6px 18px; }
+details.changelog summary { cursor:pointer; font-family:var(--serif); font-weight:700;
+  font-size:16px; color:var(--navy); padding:10px 0; list-style-position:inside; }
+details.changelog summary:hover { color:var(--teal); }
+details.changelog[open] { padding-bottom:16px; }
+
+.backtop { position:fixed; right:22px; bottom:22px; background:var(--teal); color:#fff;
+  text-decoration:none; font-family:var(--mono); font-size:13px; padding:9px 13px;
+  border-radius:999px; box-shadow:0 4px 14px rgba(14,124,123,.35); }
+a:focus-visible, summary:focus-visible { outline:3px solid var(--teal); outline-offset:2px; }
+
+@media (max-width:1023px) {
+  .layout { grid-template-columns:1fr; padding:18px 12px 70px; }
+  nav.toc { position:static; max-height:none; }
+  nav.toc .toc-body { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); }
+}
+@media print {
+  .masthead { background:#12333F !important; -webkit-print-color-adjust:exact; }
+  nav.toc, .backtop { display:none; }
+  .layout { display:block; padding:0; }
+  article { border:none; padding:0; }
+  details.changelog { display:block; }
+  details.changelog summary { display:none; }
+  details.changelog > * { display:block; }
+}
+</style>
+</head>
+<body>
+<header class="masthead">
+  <div class="inner">
+    <div class="kicker">OPTIONS TRADING KNOWLEDGE BASE</div>
+    <h1>選擇權交易知識手冊</h1>
+    <div class="badges">
+      <span class="badge solid">版本 v3.2</span>
+      <span class="badge">更新 2026-07-14</span>
+      <span class="badge">白話範例版</span>
+      <span class="badge">小資族適配</span>
+    </div>
+  </div>
+</header>
+<div class="layout">
+  <nav class="toc" aria-label="章節導航">
+    <p class="toc-title">章節導航 INDEX</p>
+    <div class="toc-body">
+    <a class="toc-h3" href="#sec-3">A. 全文審閱修正（金融教學者視角邏輯檢查）</a>
+<a class="toc-h3" href="#sec-4">B. 新增模組：美股 Covered Call 基礎實戰（4.4.1）</a>
+<a class="toc-h3" href="#sec-5">C. 新文章的審閱修正（納入前已修正）</a>
+<a class="toc-h3" href="#sec-7">新增內容</a>
+<a class="toc-h3" href="#sec-8">修正的邏輯錯誤與不精確處</a>
+<a class="toc-h3" href="#sec-9">去除的偏誤與情緒性內容</a>
+<a class="toc-h3" href="#sec-10">去除的重複</a>
+<a class="toc-h2" href="#sec-11">一、主旨</a>
+<a class="toc-h2" href="#sec-12">二、核心觀念與名詞定義</a>
+<a class="toc-h3" href="#sec-13">2.0 一分鐘看懂選擇權（預售屋比喻，全篇主軸範例）</a>
+<a class="toc-h3" href="#sec-14">2.1 基礎名詞</a>
+<a class="toc-h3" href="#sec-15">2.2 四種基本策略與損益公式</a>
+<a class="toc-h3" href="#sec-16">2.3 價位狀態（Moneyness）</a>
+<a class="toc-h3" href="#sec-17">2.4 四大 Greeks</a>
+<a class="toc-h3" href="#sec-18">2.5 市場結構與資金流名詞</a>
+<a class="toc-h2" href="#sec-19">三、技術指標與進場時機</a>
+<a class="toc-h3" href="#sec-20">3.1 賣方進場核心訊號：RSI × 布林通道 × IV Rank 三軸耦合</a>
+<a class="toc-h3" href="#sec-21">3.2 RSI 的兩種用法（情境區隔）</a>
+<a class="toc-h3" href="#sec-22">3.3 買方（LEAPS / 趨勢）進場：周線為主、IV Percentile < 35%、財報前兩週禁入、52 週高點動能確認、30% 分批、Deep ITM Delta 0.7–0.8、12–24 個月。</a>
+<a class="toc-h3" href="#sec-23">3.4 選擇權資金流判讀（機構籌碼）</a>
+<a class="toc-h3" href="#sec-24">3.5 下單七步驟決策流程</a>
+<a class="toc-h3" href="#sec-25">3.6 事件與宏觀觸發</a>
+<a class="toc-h3" href="#sec-26">3.7 素材缺口</a>
+<a class="toc-h2" href="#sec-27">四、策略對照表</a>
+<a class="toc-h3" href="#sec-28">4.1 買方 vs 賣方</a>
+<a class="toc-h3" href="#sec-29">4.2 策略難度與適用場景</a>
+<a class="toc-h3" href="#sec-30">4.3 四種垂直價差</a>
+<a class="toc-h3" href="#sec-31">4.4 賣方收租體系</a>
+<a class="toc-h3" href="#sec-32">4.4.1 美股 Covered Call 基礎實戰（v3.1 新增）</a>
+<a class="toc-h3" href="#sec-33">4.4.2 Covered Call 的邏輯張力與實務難點（v3.2 新增）</a>
+<a class="toc-h3" href="#sec-34">4.4.3 小資族適配路徑：單筆投入 ≤ $1,000 的現實（v3.2 新增）</a>
+<a class="toc-h3" href="#sec-35">4.5 LEAPS vs 槓桿 ETF vs 正股</a>
+<a class="toc-h3" href="#sec-36">4.6 財報事件策略</a>
+<a class="toc-h3" href="#sec-37">4.7 機構 vs 散戶 ATM Call（勿盲跟單）</a>
+<a class="toc-h3" href="#sec-38">4.8 對沖工具</a>
+<a class="toc-h2" href="#sec-39">五、風險控管原則</a>
+<a class="toc-h3" href="#sec-40">5.1 部位規模</a>
+<a class="toc-h3" href="#sec-41">5.2 停損與出場</a>
+<a class="toc-h3" href="#sec-42">5.3 統計心理紀律</a>
+<a class="toc-h3" href="#sec-43">5.4 保證金與帳戶生存</a>
+<a class="toc-h3" href="#sec-44">5.5 最大可承受損失</a>
+<a class="toc-h2" href="#sec-45">六、複習重點摘要</a>
+<a class="toc-h2" href="#sec-46">附錄一：選擇權在長期資產配置中的定位</a>
+<a class="toc-h2" href="#sec-47">附錄二：中壯年資產配置與省稅摘要（概念存目，非選擇權主體）</a>
+    </div>
+  </nav>
+  <main>
+    <article>
+<h1>選擇權交易知識統整筆記（完整版・白話範例版）</h1>
+<p><strong>更新日期：2026-07-14</strong>
+<strong>版本：v3.2</strong>
+<strong>本次新增：4.4.2 Covered Call 邏輯張力與實務難點、4.4.3 小資族適配路徑（單筆 ≤ $1,000）</strong></p>
+<hr/>
+<details class="changelog"><summary>本次更新記錄（v3.1 → v3.2）（點擊展開）</summary>
+<ol>
+<li><strong>新增 4.4.2</strong>：CC 策略層面的三項邏輯張力（賣出右尾 vs 成長股 thesis、Roll 無限展期陷阱、租金緩衝的停損麻痺）與六項實務難點（資金門檻、財報重疊、套牢困境、遠 OTM 流動性、零股覆蓋、稅務摩擦）。</li>
+<li><strong>新增 4.4.3</strong>：依「單筆投入 ≤ $1,000」的資金現實，重排各策略可行性——<strong>明確禁止用低價投機股繞過 CSP 資金門檻</strong>、設定收租體系的解鎖門檻、指出小帳戶與 5% 部位規則的結構性衝突。</li>
+<li>環流圖（Sell Put → LEAPS → CC）加註適用前提：屬<strong>資產達標後的模組</strong>，小資階段以零股累積現股為主軸。</li>
+</ol>
+</details><details class="changelog"><summary>前版更新記錄（v3.0 → v3.1）（點擊展開）</summary>
+<h3 id="sec-3">A. 全文審閱修正（金融教學者視角邏輯檢查）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>發現的問題</th>
+<th>修正結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>2.2 表 Buy Put 最大獲利寫「接近無限」</td>
+<td><strong>不精確</strong>。Put 獲利有界：（履約價−權利金）×100，股價歸零時最大</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LEAPS 用「IV Percentile &lt; 35%」、決策流程用「IV Rank 30/70%」，<strong>兩指標混用且未定義</strong></td>
+<td>2.1 增列 IV Percentile 定義。兩者判讀方向一致但<strong>數值不可互換</strong>：Rank＝現值在年度高低區間的線性位置；Percentile＝過去一年低於現值的天數占比。各門檻沿用原始出處，複習時勿張冠李戴</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Theta 白話例「賣方是賣冰塊的人，融掉的都進口袋」<strong>因果不通</strong>（冰融化傷的是持有者）</td>
+<td>改為保險公司比喻：收了保費後每平安過一天，義務就少一天</td>
+</tr>
+<tr>
+<td>4</td>
+<td>5.2「絕不持有到到期」的理由（Theta 末段衝刺）<strong>只適用買方</strong>，卻套在「價差/買方」整列——信用價差的 Theta 末段其實對賣方<strong>有利</strong></td>
+<td>拆開陳述：買方提前出場防 Theta 衝刺＋部位賭博化；賣方（信用價差）提前平倉是防 <strong>Gamma 風險與指派風險</strong>（呼應 5.4 當日到期 ITM 教訓），理由不同、結論相同</td>
+</tr>
+<tr>
+<td>5</td>
+<td>4.4 CSP「Delta 0.15–0.30」與 3.1 三軸框架「0.15–0.25」<strong>數字不一致</strong></td>
+<td>統一：基準 0.15–0.25；0.25–0.30 僅為低 IV Rank 時的波動率修正情境（3.1 第三列）</td>
+</tr>
+<tr>
+<td>6</td>
+<td>摘要與附錄一「選擇權槓桿比槓桿 ETF 更大」<strong>過度概括</strong></td>
+<td>加限定：視合約而定——短天期 OTM 可達數十倍，Deep ITM LEAPS 約 2–3 倍（與槓桿 ETF 相當，但無每日重置損耗）</td>
+</tr>
+<tr>
+<td>7</td>
+<td>4.6 缺少手冊原有的「過財報 Plan B」</td>
+<td>補回：必須過財報時改用<strong>價差結構</strong>，Short leg 的 Vega 抵消部分 IV Crush 損失</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-4">B. 新增模組：美股 Covered Call 基礎實戰（4.4.1）</h3>
+<p>來源：《股票收租術》，含合約規格、Sell to Open / Buy to Close 下單、三參數選擇、三種到期結局、Roll 轉倉、<strong>除息日提前指派風險</strong>、到期自動履約規則。</p>
+<h3 id="sec-5">C. 新文章的審閱修正（納入前已修正）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>原文問題</th>
+<th>修正結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8</td>
+<td>「KD/RSI 過熱＝絕佳賣 CC 時機」與本筆記 3.2「RSI 高檔鈍化嚴禁賣 Call」<strong>表面衝突</strong></td>
+<td>區隔兩種型態：<strong>震盪股觸壓力位的過熱回檔</strong>（賣 CC 合理）vs <strong>趨勢股創新高的高檔鈍化</strong>（賣 CC 高機率被交股、放棄主升段）。且 3.2 禁令的核心是「裸賣」爆倉風險；CC 有現股擔保，風險轉為機會成本</td>
+</tr>
+<tr>
+<td>9</td>
+<td>「財報/CPI/FOMC 前賣 CC 收肥租」<strong>只講收益未講代價</strong></td>
+<td>補：跳空大漲被交股機率同步飆高；核心愛股財報前賣 CC 應將 Delta 退至 0.10–0.15（與 3.1 IV Rank 修正邏輯一致），或跳過該週</td>
+</tr>
+<tr>
+<td>10</td>
+<td>CC 範例「獲利 90% 平倉」與 CSP「50% 平倉」<strong>規則不一致</strong></td>
+<td>調和為效率判斷：50–90% 區間，以「剩餘權利金 ÷ 剩餘天數」衡量——剩 10% 租金還要押 3 週就買回</td>
+</tr>
+<tr>
+<td>11</td>
+<td>「波段高點權利金通常最貴」</td>
+<td><strong>歸因修正</strong>：貴的來源是 IV（波動預期），不是股價高度本身；判斷肥瘦看 IV Rank 不看 K 線高度</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+</details><details class="changelog"><summary>前版更新記錄（v2.0 → v3.0）（點擊展開）</summary>
+<h3 id="sec-7">新增內容</h3>
+<ol>
+<li><strong>選擇權在長期資產配置中的定位</strong>（附錄一）：正股的輔助工具、槓桿大於槓桿 ETF、零和遊戲的正確理解。</li>
+<li><strong>預售屋訂金比喻體系</strong>：作為全篇買方/賣方直覺理解的主軸範例。</li>
+<li><strong>中壯年資產配置與省稅摘要</strong>（附錄二，非選擇權主體，濃縮保留）。</li>
+<li>全篇每個核心觀念加入白話範例。</li>
+</ol>
+<h3 id="sec-8">修正的邏輯錯誤與不精確處</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>原文問題</th>
+<th>修正結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>文章稱 Buy Put 是「跟賣家簽約，未來用<strong>比較便宜的錢買</strong>」</td>
+<td><strong>錯誤</strong>。Buy Put 買的是「未來以約定價格<strong>賣出</strong>」的權利——市價跌得越低，你越能用高於市價的履約價賣掉獲利。方向對但機制描述反了</td>
+</tr>
+<tr>
+<td>2</td>
+<td>文章稱 Sell Put 的義務是「買家要買你就一定要<strong>賣</strong>」</td>
+<td><strong>錯誤</strong>。Sell Put 的義務是<strong>被迫用履約價買進</strong>（接股票）；「一定要賣」是 Sell Call 的義務。兩者義務方向相反</td>
+</tr>
+<tr>
+<td>3</td>
+<td>「選擇權是零和遊戲，沒有例外」</td>
+<td><strong>需加註</strong>：單張合約層面（未計手續費）確實零和；但放進投資組合後不是——用 Put 避險像買火險，沒理賠不代表「輸」，Covered Call 收租是持股報酬的重分配。零和是合約數學，不是策略價值判斷</td>
+</tr>
+<tr>
+<td>4</td>
+<td>「讓你的年度績效往 50% 邁進」</td>
+<td><strong>期望值偏誤</strong>，屬行銷語言。與本筆記的統計框架（賣方高勝率低賠率、連輸常態）不符，不納入目標設定</td>
+</tr>
+<tr>
+<td>5</td>
+<td>節稅內容（DAF、529、Bonus Depreciation 等）</td>
+<td><strong>僅適用美國稅制</strong>，台灣稅務居民不適用，僅存目於附錄二供概念參考</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-9">去除的偏誤與情緒性內容</h3>
+<p>「把你的不慘建立在別人的慘上」「傻瓜/聰明」對立敘事、「金融市場沒在跟你講武德」等情緒性修辭——保留其教學用比喻功能後，敘事框架不納入；老高影片等來源引用不納入。</p>
+<h3 id="sec-10">去除的重複</h3>
+<p>文章第二部分的四種基本策略、權利金/履約價定義、Sell Put「被買到算賺到」邏輯，與 v2.0 第 2.2 節及 CSP 模組重複，僅吸收其比喻，不重複收錄條目。</p>
+<hr/>
+</details><h2 class="m-core" id="sec-11">一、主旨</h2>
+<p>本筆記統整所有選擇權討論，涵蓋七大知識模組：<strong>基礎名詞與 Greeks、買方策略、賣方策略（動態 Delta 框架）、財報事件交易、資金流判讀、下單決策流程、對沖與帳戶風控</strong>，並附<strong>選擇權在長期資產配置中的定位</strong>。核心哲學：<strong>選擇權是正股的輔助工具而非賭具——以賣方收租為主體、動態 Delta 因股制宜、IV Rank 修正貪婪與恐懼、資金流與隔日 OI 驗證機構意圖、部位規模與保證金紀律為生存底線</strong>。</p>
+<hr/>
+<h2 class="m-core" id="sec-12">二、核心觀念與名詞定義</h2>
+<h3 id="sec-13">2.0 一分鐘看懂選擇權（預售屋比喻，全篇主軸範例）</h3>
+<p>選擇權＝<strong>付一點訂金，換一個「未來照約定價格買或賣」的權利；出錢的人有權決定最後要不要成交，收錢的人只有義務配合</strong>。</p>
+<blockquote class="example">
+<p>💡 白話例：你看好一間預售屋三年後會漲，現在付 1 萬訂金，約定三年後可用 100 萬買。三年後房價漲到 130 萬 → 你行使權利，101 萬成本換 130 萬資產；房價跌到 80 萬 → 你放棄，最多虧 1 萬訂金。<strong>訂金＝權利金，約定價＝履約價，三年＝到期日。</strong></p>
+</blockquote>
+<h3 id="sec-14">2.1 基礎名詞</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>名詞</th>
+<th>定義</th>
+<th>💡 白話例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>權利金（Premium）</strong></td>
+<td>買方付、賣方收的價格＝內含價值＋時間價值</td>
+<td>預售屋的訂金；買方最多就虧這筆</td>
+</tr>
+<tr>
+<td><strong>履約價（Strike）</strong></td>
+<td>約定的買賣價格</td>
+<td>合約上寫死的「100 萬」</td>
+</tr>
+<tr>
+<td><strong>到期日</strong></td>
+<td>權利的有效期限，過期歸零</td>
+<td>折價券的使用期限</td>
+</tr>
+<tr>
+<td><strong>內含價值</strong></td>
+<td>立即履約可實現的價值</td>
+<td>市價 35,000 的手機，你有張「30,000 購買券」→ 券至少值 5,000</td>
+</tr>
+<tr>
+<td><strong>時間價值</strong></td>
+<td>權利金 − 內含價值</td>
+<td>「說不定之後漲更多」的期待值，越接近到期越不值錢</td>
+</tr>
+<tr>
+<td><strong>隱含波動率（IV）</strong></td>
+<td>市場對未來波動的定價</td>
+<td>颱風警報發布後，防災保險立刻變貴——不是損失發生了，是「大家覺得會出事」</td>
+</tr>
+<tr>
+<td><strong>IV Rank</strong></td>
+<td>當前 IV 在過去一年<strong>高低區間</strong>的線性位置（0–100%）</td>
+<td>同一張保單，今天的價格落在過去一年最便宜與最貴之間的哪個位置；&gt;70% 就是在最貴的區段</td>
+</tr>
+<tr>
+<td><strong>IV Percentile</strong></td>
+<td>過去一年中 IV <strong>低於當前值的天數占比</strong>；與 IV Rank 判讀方向一致但<strong>數值不可互換</strong></td>
+<td>「過去 252 天有幾天比今天便宜」——LEAPS 的 &lt;35% 門檻用的是這個，勿與 IV Rank 的 30/70 門檻混用</td>
+</tr>
+<tr>
+<td><strong>IV Crush</strong></td>
+<td>事件落地後 IV 暴跌</td>
+<td>颱風轉向出海，前一天搶購的天價保險瞬間跌回原價</td>
+</tr>
+<tr>
+<td><strong>DTE / 0DTE</strong></td>
+<td>距到期天數／當日到期</td>
+<td>今天就過期的折價券</td>
+</tr>
+<tr>
+<td><strong>被指派</strong></td>
+<td>賣方被迫履約</td>
+<td>收了訂金的建商，被買家要求照約交屋</td>
+</tr>
+<tr>
+<td><strong>Beta / Beta Decay</strong></td>
+<td>個股波動倍數／每日重置槓桿 ETF 的長期損耗</td>
+<td>天天歸零重算的計步器，走三步退兩步會越算越少</td>
+</tr>
+<tr>
+<td><strong>Net Debit / Credit、R/R</strong></td>
+<td>價差淨成本/淨收入；報酬風險比</td>
+<td>團購折抵後的實付金額；「最多賺的 ÷ 最多賠的」</td>
+</tr>
+<tr>
+<td><strong>Binary / Continuous Event、Drift</strong></td>
+<td>非 A 即 B 事件／持續性事件／事件前慣性漂移</td>
+<td>開獎（財報）vs 每月成績單（月營收）；開獎前彩券越炒越貴就是 Drift</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-15">2.2 四種基本策略與損益公式</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>看法</th>
+<th>最大獲利</th>
+<th>最大虧損</th>
+<th>損益平衡點</th>
+<th>💡 白話例（房屋比喻）</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Buy Call</td>
+<td>看大漲</td>
+<td>無限</td>
+<td>權利金</td>
+<td>履約價＋權利金</td>
+<td>付訂金鎖定「可以用 100 萬買」，漲越多賺越多</td>
+</tr>
+<tr>
+<td>Sell Call</td>
+<td>不漲/小跌</td>
+<td>權利金</td>
+<td><strong>理論無限</strong></td>
+<td>履約價＋權利金</td>
+<td>收訂金答應「你要買我就得賣」——房價飆到 300 萬也得照 100 萬賣，所以理論虧損無限</td>
+</tr>
+<tr>
+<td>Buy Put</td>
+<td>看大跌</td>
+<td>巨大但有界：（履約價−權利金），股價歸零時最大</td>
+<td>權利金</td>
+<td>履約價−權利金</td>
+<td>付訂金鎖定「可以用 100 萬<strong>賣</strong>」——房價崩到 60 萬，你仍能照 100 萬脫手（<strong>注意：是賣的權利，不是便宜買</strong>）</td>
+</tr>
+<tr>
+<td>Sell Put</td>
+<td>不跌/小漲</td>
+<td>權利金</td>
+<td>履約價−權利金（有界但巨大）</td>
+<td>履約價−權利金</td>
+<td>收訂金答應「你要賣我就得<strong>買</strong>」——建商認為房子真值 80 萬，跌到 80 萬被迫接手也甘願</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>看多＝Buy Call 或 Sell Put；看空＝Buy Put 或 Sell Call。</strong> 買方付錢、有權決定、損失封頂但需<strong>方向＋幅度＋時間三者全對</strong>；賣方收錢、只有義務、勝率高但一次極端行情可能爆倉。</p>
+<blockquote class="example">
+<p>💡 記法：<strong>出錢的人講話</strong>。付權利金＝買到決定權；收權利金＝賣掉決定權，之後對方說了算。</p>
+</blockquote>
+<p><strong>零和遊戲的正確理解（修正版）：</strong> 單張合約買方賺＝賣方虧，數學上零和。但放進組合就不是輸贏問題——</p>
+<blockquote class="example">
+<p>💡 白話例：你幫房子買火險，一年後沒失火，保費「虧」了嗎？沒有，你買到一年安心。用 Put 保護持股同理；Covered Call 收租金也是持股報酬的重新分配。<strong>零和是合約的數學性質，不是策略的價值判斷。</strong></p>
+</blockquote>
+<h3 id="sec-16">2.3 價位狀態（Moneyness）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>狀態</th>
+<th>條件（Call）</th>
+<th>Delta</th>
+<th>特性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>價平 ATM</td>
+<td>履約價 ≈ 現價</td>
+<td>~0.5</td>
+<td>時間價值最高、Theta 最快、<strong>Gamma 最大</strong></td>
+</tr>
+<tr>
+<td>價內 ITM</td>
+<td>履約價 &lt; 現價</td>
+<td>0.6–1.0</td>
+<td>內含價值佔比高，耐放</td>
+</tr>
+<tr>
+<td>價外 OTM</td>
+<td>履約價 &gt; 現價</td>
+<td>0–0.4</td>
+<td>最便宜、最易歸零</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="example">
+<p>💡 白話例：市價 35,000 的手機。「30,000 購買券」＝ITM（現賺 5,000，券很貴但實在）；「35,000 券」＝ATM（全靠之後會不會漲）；「40,000 券」＝OTM（現在毫無用處，純賭未來大漲，所以最便宜）。</p>
+</blockquote>
+<h3 id="sec-17">2.4 四大 Greeks</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Greek</th>
+<th>定義</th>
+<th>買方</th>
+<th>賣方</th>
+<th>💡 白話例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Delta</strong></td>
+<td>標的漲 $1 的權利金變動；≈ 到期價內機率</td>
+<td>正</td>
+<td>Sell Put 為正</td>
+<td>影子跟人走：Delta 0.5＝股票走一步、選擇權跟半步；也可讀成「50% 機率到期有價值」</td>
+</tr>
+<tr>
+<td><strong>Theta</strong></td>
+<td>每日時間價值流失，末 10 天加速</td>
+<td>敵人</td>
+<td>朋友</td>
+<td>買方手上的冰塊：不做任何事也天天融化，快到期融最快；賣方像<strong>收了整期保費的保險公司</strong>——每平安過一天，要扛的義務就少一天，那一天的保費等於落袋</td>
+</tr>
+<tr>
+<td><strong>Vega</strong></td>
+<td>IV 變 1% 的權利金變動</td>
+<td>正</td>
+<td>負</td>
+<td>颱風警報一發布，你手上的保單轉手價立刻變貴（買方爽）；警報解除立刻崩跌（賣方爽）</td>
+</tr>
+<tr>
+<td><strong>Gamma</strong></td>
+<td>Delta 的變化速度，ATM 最大</td>
+<td>正</td>
+<td><strong>負</strong></td>
+<td>油門靈敏度：ATM 像超跑，輕踩就暴衝——買方的驚喜，賣方的噩夢</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>方向 ≠ 買 Call：</strong> 進場前拆成三個獨立維度——<strong>方向（Delta）、波動（Vega）、時間（Theta）</strong>。</p>
+<blockquote class="example">
+<p>💡 白話例：你猜對了「會下雨」（方向），但雨傘在你到貨前就漲完價（波動已反映），且你買的是「只限今天使用」的傘（時間不夠）——三個只對一個，照樣虧錢。這就是「股票漲了、我的 Call 卻沒賺」的原因。</p>
+</blockquote>
+<h3 id="sec-18">2.5 市場結構與資金流名詞</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>名詞</th>
+<th>定義</th>
+<th>💡 白話例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>OI（未平倉量）</strong></td>
+<td>收盤後仍留倉的合約數，<strong>盤中不即時更新</strong></td>
+<td>旅館「過夜住客數」，隔天早上才知道昨晚誰真的留下來</td>
+</tr>
+<tr>
+<td><strong>Volume / Vol/OI</strong></td>
+<td>當日成交量／成交量÷原有未平倉量</td>
+<td>旅館大廳一天的「進出人次」；人次是住客的 8 倍＝大批新客可能入住，但也可能只是逛大廳的（當沖）</td>
+</tr>
+<tr>
+<td><strong>Bid/Ask 成交方向</strong></td>
+<td>Ask 成交＝買方急著要；Bid 成交＝賣方急著出</td>
+<td>菜市場：照標價不殺價直接買＝很急（Ask）；攤販降價急售＝想跑（Bid）</td>
+</tr>
+<tr>
+<td><strong>Sweep</strong></td>
+<td>橫掃多交易所的急迫大單</td>
+<td>一次掃光全城每家店的同款商品，勢在必得</td>
+</tr>
+<tr>
+<td><strong>Bearish Premium</strong></td>
+<td>Ask-side Put＋Bid-side Call 的累積權利金（紅偏空/綠偏多）</td>
+<td>「搶著買保險的錢＋急著賣樂觀券的錢」加總，紅字越多代表市場越怕跌</td>
+</tr>
+<tr>
+<td><strong>Put Skew</strong></td>
+<td>Put 相對 Call 的 IV 溢價</td>
+<td>水災險比晴天險貴多少——差距拉大＝大家越來越怕淹水</td>
+</tr>
+<tr>
+<td><strong>Call Wall / GEX / Gamma Flip</strong></td>
+<td>最大 OI 的 Call 履約價／造市商 Gamma 曝險／翻轉點</td>
+<td>天花板價位（磁鐵效應）；造市商像避震器，跌破 Flip 點避震器反過來變彈簧，助漲助跌</td>
+</tr>
+<tr>
+<td><strong>CTA / DIX</strong></td>
+<td>趨勢追蹤量化基金／暗池情緒指標</td>
+<td>一群設好鬧鐘的機器人，價格碰線集體同向衝；機構在後巷的真實交易情緒</td>
+</tr>
+</tbody>
+</table></div>
+<hr/>
+<h2 class="m-signal" id="sec-19">三、技術指標與進場時機</h2>
+<h3 id="sec-20">3.1 賣方進場核心訊號：RSI × 布林通道 × IV Rank 三軸耦合</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>市況</th>
+<th>訊號</th>
+<th>Delta 選擇</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>一般市況</td>
+<td>RSI 40–60</td>
+<td>Sell Put <strong>0.15–0.25</strong></td>
+</tr>
+<tr>
+<td>極度超賣</td>
+<td><strong>日線 RSI &lt; 30＋跌破布林下軌</strong></td>
+<td>上調至 <strong>0.40</strong></td>
+</tr>
+<tr>
+<td>平靜低波動</td>
+<td>IV Rank 低、權利金薄</td>
+<td>0.25–0.30</td>
+</tr>
+<tr>
+<td>財報前/小恐慌</td>
+<td>IV Rank 飆高</td>
+<td>退至 <strong>0.10–0.15</strong></td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="example">
+<p>💡 白話例：你是保險公司。平時賣「離現價很遠」的便宜保單穩穩收租（低 Delta）；大地震剛過人人搶保險、保費暴貴（IV 飆），你敢把承保範圍拉近一點多收錢（Delta 0.40）——因為恐慌總會退潮（IV Crush），而且真出事被指派，也是用跳樓價接到你本來就想要的房子（愛股）。反之保費太便宜的季節（低 IV Rank），不值得為薄利承擔風險。</p>
+</blockquote>
+<p><strong>避開 ATM：</strong> 超賣時選 Delta 0.35–0.40 而非 0.50。</p>
+<blockquote class="example">
+<p>💡 白話例：站在懸崖邊拍照（ATM，Gamma 最大）風最大一吹就掉；退五步拍（Delta 0.35–0.40）風景差不多，命保住了——那 5–10% 就是安全緩衝墊。</p>
+</blockquote>
+<p><strong>Beta 分層 Delta 天花板：</strong> GOOGL/AMZN 0.40–0.45、NVDA/AMD/MU 0.40、TSLA 0.30–0.35、投機小型股不適用。</p>
+<blockquote class="example">
+<p>💡 白話例：對穩重的老員工（低 Beta）可以派重任務；對天才但情緒化的新人（TSLA）任務要打七折——它 RSI &lt; 30 之後再跌 10% 是家常便飯。</p>
+</blockquote>
+<h3 id="sec-21">3.2 RSI 的兩種用法（情境區隔）</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>情境</th>
+<th>解讀</th>
+<th>操作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>恐慌回檔、震盪市</td>
+<td>RSI &lt; 30＝均值回歸機會</td>
+<td>賣方進場（上調 Delta 賣 Put）</td>
+</tr>
+<tr>
+<td>趨勢多頭、創新高</td>
+<td><strong>RSI 高檔鈍化＝強勢特徵，非出場訊號</strong></td>
+<td>續抱，MACD 死叉才走；<strong>嚴禁因 RSI 高就做空或裸賣 Call</strong>（Covered Call 的趨勢股限制見 4.4.1）</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="example">
+<p>💡 白話例：橡皮筋往下拉太緊會彈回來（超賣做多邏輯）；但火箭升空時「飛太高」不是做空理由——它可能正要進軌道。跌深可以接，漲多不能空。</p>
+</blockquote>
+<h3 id="sec-22">3.3 買方（LEAPS / 趨勢）進場：周線為主、IV Percentile &lt; 35%、財報前兩週禁入、52 週高點動能確認、30% 分批、Deep ITM Delta 0.7–0.8、12–24 個月。</h3>
+<blockquote class="example">
+<p>💡 白話例：買長天期權利就像簽兩年長租約——要挑<strong>淡季</strong>簽（低 IV），絕不在展覽週（財報前）簽天價短約；且租「幾乎等於自己房子」的物件（Deep ITM），而不是「也許未來會蓋好」的空地（深 OTM）。</p>
+</blockquote>
+<h3 id="sec-23">3.4 選擇權資金流判讀（機構籌碼）</h3>
+<p><strong>三關驗證：資金流是領先警訊 → 隔日 OI 是留倉確認 → 股價是最終確認。缺一不可。</strong></p>
+<p><strong>(1) 成交方向（限新開倉）：</strong> Put 在 Ask／Call 在 Bid＝偏空；Put 在 Bid／Call 在 Ask＝偏多。Bearish Premium（紅）＝Ask-side Put＋Bid-side Call 累積。</p>
+<blockquote class="example">
+<p>💡 白話例：有人衝進保險公司<strong>不殺價</strong>狂買水災險（Put at Ask）＝他可能知道要淹水；有人急著把「樂觀券」照收購價倒給盤商（Call at Bid）＝他不信會再漲。</p>
+</blockquote>
+<p><strong>(2) Vol/OI 分級：</strong> &lt;0.5 平穩、0.5–1 正常、1–2 注意、<strong>2–5 異常（新資金）</strong>、&gt;5 極端——先排除 0DTE 當沖、Gamma 交易、移倉、造市商對沖（尤其近到期合約）。</p>
+<blockquote class="example">
+<p>💡 白話例：旅館平常 100 位住客，今天大廳湧進 800 人次——可能是旅行團要入住（新倉），也可能只是來吃自助餐的（當沖）。<strong>要等明早退房統計（隔日 OI）才知道誰真的住下來。</strong></p>
+</blockquote>
+<p><strong>(3) 機構佈空完整條件（越多越可靠）：</strong> Put 主動在 Ask＋Bearish Premium 偏紅＋Size/Premium 大＋Vol/OI &gt; 2＋到期 14–90 天＋履約價 ATM 至價外 3–10%＋Sweep 連續掃單。</p>
+<p><strong>(4) 隔日 OI 確認：</strong> 當日 Put 成交 10,000 張、原 OI 1,000 → 隔日 OI 增至 8,000＝新建倉確認；僅增至 1,200＝當沖換手，<strong>訊號作廢</strong>。</p>
+<p><strong>(5) 意圖區辨：</strong> 避險買 Put 與方向性做空<strong>訊號相同、意圖不同</strong>，不能直接推論機構看空。</p>
+<blockquote class="example">
+<p>💡 白話例：鄰居狂買火險，可能是他知道電線老化（看空），也可能只是剛買了豪宅想保護它（避險既有多頭）。單看「買保險」這動作分不出來。</p>
+</blockquote>
+<p><strong>(6) 最危險複合型態：</strong> 高位橫盤＋Put flow/IV/Put Skew 齊升＋反彈不過前高——<strong>嚴禁上調賣方 Delta</strong>。</p>
+<blockquote class="example">
+<p>💡 白話例：派對還在放音樂，但你注意到主人悄悄把名畫搬上車、保險員頻繁進出——音樂停之前先離場。</p>
+</blockquote>
+<h3 id="sec-24">3.5 下單七步驟決策流程</h3>
+<p>① 說得出理由、時間框架、<strong>看錯的訊號</strong>（說不出→不進場）→ ② 技術面確認（52 週位置、RSI 依情境、MACD、支撐壓力）→ ③ 確認事件時間（Binary &lt;2 週→財報前出場賺 Drift＋IV 溢價，或過財報須有 Plan B）→ ④ IV Rank 定買賣方（&gt;70% 絕不裸買，用價差；&lt;30% 可裸買）→ ⑤ 查歷史財報統計（Implied vs Actual Move、Drift）→ ⑥ 看機構流向（Call Wall、P/C Ratio、依 3.4 驗證）→ ⑦ 選結構（價差 Long leg Delta 0.4–0.6、R/R ≥ 2、到期＝事件＋7–10 天、先 1 口、單筆 ≤ 5%）。</p>
+<blockquote class="example">
+<p>💡 白話例：像登機前檢查表——護照（理由）、天氣（技術面）、航班時間（事件）、票價是否被炒高（IV Rank）、這航線的準點率（歷史統計）、其他老手怎麼訂（機構流向）、最後才刷卡（下單）。跳過任何一關就登機，出事別意外。</p>
+</blockquote>
+<h3 id="sec-25">3.6 事件與宏觀觸發</h3>
+<p>財報落地 IV Crush 完成→LEAPS 窗口；財報前 IV 飆→Iron Condor/遠 Delta Bull Put Spread；殖利率破關鍵位→股票曝險降至 50% 下；EPS 下修潮→Bear Put Spread 對沖；關鍵均線附近→防 CTA 單向加速、勿在 Gamma Flip 下方裸賣。</p>
+<h3 id="sec-26">3.7 素材缺口</h3>
+<p><strong>VRVP、TD Sequential、AVWAP</strong> 搭配邏輯仍無素材，待補。</p>
+<hr/>
+<h2 class="m-strategy" id="sec-27">四、策略對照表</h2>
+<h3 id="sec-28">4.1 買方 vs 賣方</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th></th>
+<th>買方</th>
+<th>賣方</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>最大獲利/虧損</td>
+<td>無限／權利金封頂</td>
+<td>權利金／裸賣 Call 無限、賣 Put 有界巨大、價差鎖定</td>
+</tr>
+<tr>
+<td>Theta、IV Crush</td>
+<td>敵人</td>
+<td>收益來源</td>
+</tr>
+<tr>
+<td>勝率結構</td>
+<td>低勝率高賠率</td>
+<td>高勝率低賠率</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="example">
+<p>💡 白話例：買方是買樂透的人——小錢賭大獎，常常槓龜；賣方是開彩券行的人——天天賺小錢，但要防有人真的中頭獎。</p>
+</blockquote>
+<h3 id="sec-29">4.2 策略難度與適用場景</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>難度</th>
+<th>IV 環境</th>
+<th>場景</th>
+<th>最大虧損</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>買現股</td>
+<td>★</td>
+<td>不影響</td>
+<td>長線、無時間壓力</td>
+<td>持倉全虧</td>
+</tr>
+<tr>
+<td>裸買 Call</td>
+<td>★★</td>
+<td>&lt;30%</td>
+<td>強烈看漲</td>
+<td>權利金</td>
+</tr>
+<tr>
+<td>ITM Call 0.7+</td>
+<td>★★</td>
+<td>中低</td>
+<td>看多省資金 30–40%</td>
+<td>權利金</td>
+</tr>
+<tr>
+<td>Bull Call Spread</td>
+<td>★★★</td>
+<td><strong>&gt;70%</strong></td>
+<td>有目標價、降 Theta</td>
+<td>Net Debit</td>
+</tr>
+<tr>
+<td>Iron Condor</td>
+<td>★★★★</td>
+<td>高</td>
+<td>橫盤、賭 IV Crush</td>
+<td>限定</td>
+</tr>
+<tr>
+<td>CSP / Covered Call</td>
+<td>★★★</td>
+<td>高更佳</td>
+<td>收租＋願意接/交股</td>
+<td>履約價−權利金</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-30">4.3 四種垂直價差</h3>
+<p>Bull Call Spread（高 IV 首選買方結構，獲利封頂須先接受）、Bear Put Spread（對沖 ≤ 部位 2%）、Bull Put Spread（高勝率吃 Theta，88–94% 勝率伴隨 1:8 賠率）、Bear Call Spread。</p>
+<p><strong>NVDA 220/250 範例：</strong> 買 220C $12、賣 250C $3.50 → Net Debit $850；最大獲利 $2,150；平衡點 $228.50；R/R 2.53。</p>
+<blockquote class="example">
+<p>💡 白話例（Bull Call Spread）：你想買 3 萬的手機券（Buy 220C），同時把自己用不到的「4 萬以上才有用的券」賣給別人（Sell 250C）收回一點錢——實付變便宜、每天的過期損耗（Theta）也有人幫你分攤，代價是漲超過 4 萬的部分不歸你。</p>
+<p>💡 白話例（Bull Put Spread 的 1:8 賠率）：你開保險公司，一年賣 100 張保單賺 94 張，但賠的那 6 張每張要吐回 8 張的保費——<strong>勝率高不等於穩賺，一次大賠吃掉八次小賺</strong>。</p>
+</blockquote>
+<h3 id="sec-31">4.4 賣方收租體系</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>結構</th>
+<th>關鍵參數</th>
+<th>💡 白話例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>CSP</strong></td>
+<td>賣 Put＋留足現金</td>
+<td>Delta 0.15–0.25（低 IV Rank 時上修至 0.30，見 3.1）、30–45 DTE、獲利 50% 平倉</td>
+<td>掛一張「跌到 90 我就買」的限價單，而且<strong>掛單還先收錢</strong>；沒跌到就白賺訂金</td>
+</tr>
+<tr>
+<td><strong>Covered Call</strong></td>
+<td>持股 100 股＋賣 Call</td>
+<td>Delta 0.2–0.3、30–45 DTE、獲利 50–90% 平倉（詳 4.4.1）</td>
+<td>房子租出去收租金，但約定「房客可用 120 萬買走」——被買走也是獲利了結</td>
+</tr>
+<tr>
+<td><strong>Wheel</strong></td>
+<td>CSP→接股→CC→交股→循環</td>
+<td>權值股</td>
+<td>低接（還先收錢）→ 出租（收租金）→ 高賣（照約交屋）→ 重來</td>
+</tr>
+<tr>
+<td><strong>Iron Condor</strong></td>
+<td>雙信用價差</td>
+<td>履約價置於隱含波動幅度外</td>
+<td>賭「颱風不會偏離預測路徑太多」，路徑兩側都收保費，兩邊都設好最大賠付</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-32">4.4.1 美股 Covered Call 基礎實戰（v3.1 新增）</h3>
+<p><strong>結構與擔保：</strong> 持有 <strong>100 股現股</strong>＋Sell to Open 一口對應的 Call（美股 1 口＝100 股）。因現股全額擔保，<strong>不佔用額外保證金</strong>；沒有現股的賣 Call＝裸賣（Naked Call），理論虧損無限，絕對禁止。台股個股選擇權 1 口＝2,000 股、流動性極差（價差大、常無法成交），本策略以美股為主戰場；台灣的股票期貨不具備 CC 收租結構。</p>
+<p><strong>建倉三參數：</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>參數</th>
+<th>建議</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>到期日</td>
+<td><strong>30–45 DTE</strong></td>
+<td>Theta 加速流失的黃金區，賣方吃時間價值效率最高</td>
+</tr>
+<tr>
+<td>履約價</td>
+<td>OTM 高於市價 5–10%</td>
+<td>保留部分上漲空間</td>
+</tr>
+<tr>
+<td>Delta</td>
+<td><strong>0.2–0.3</strong>（≈ 20–30% 被交股機率）</td>
+<td>願意交股可上調；捨不得交股（核心愛股）下調至 0.10–0.15</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="example">
+<p>💡 白話例：出租房子，租約簽 30–45 天（租金效率最好的租期），並約定「房客可用比市價高 5–10% 的價格買走房子」——真被買走，也是用你本來就滿意的價格停利。</p>
+</blockquote>
+<p><strong>三種到期結局：</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>結局</th>
+<th>到期股價</th>
+<th>結果</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td>低於履約價</td>
+<td>Call 歸零，白賺權利金，股票還在 → 續賣下一輪</td>
+</tr>
+<tr>
+<td>B</td>
+<td>貼近履約價</td>
+<td>權利金全賺＋股票升值，最佳情境</td>
+</tr>
+<tr>
+<td>C</td>
+<td>高於履約價</td>
+<td>被交股：總獲利＝（履約價−持股成本）＋權利金，<strong>錯失後段漲幅</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>出場與管理：</strong>
+- <strong>提前平倉（Buy to Close）：</strong> 權利金流失達 50–90% 即買回。判斷基準是<strong>效率</strong>——「剩餘權利金 ÷ 剩餘天數」：收 $400 兩週後剩 $40（已賺 90%），為了 $40 再押三週不划算，買回釋放額度換下一輪。與 CSP 的 50% 紀律同源；CC 因有現股擔保、無爆倉風險，可容忍到更高獲利比例再平倉。
+- <strong>強迫停利用法：</strong> 本來就打算 NVDA 到 $230 停利 → 直接賣 230 Call。沒到＝白拿權利金續抱；到了＝以理想價出場<strong>還多賺一筆權利金</strong>——兩種結果都優於單掛限價賣單。
+- <strong>Roll（轉倉）：</strong> 股價逼近履約價但想留股票 → Buy to Close 舊約＋Sell to Open 更高履約價/更遠到期（Roll up &amp; out），通常仍可收淨權利金。
+- <strong>除息日提前指派風險（美股特有，原文未提）：</strong> 美式選擇權可提前履約。<strong>除息日前一晚，若 Call 已 ITM 且剩餘時間價值 &lt; 即將發放的股息</strong>，理性買方會提前履約搶股息——你會在除息前被交股、領不到股息。持有配息標的的 CC，除息週務必檢查 ITM 短腳。
+- <strong>到期自動履約：</strong> 到期時 ITM 達 $0.01 即被自動執行，「只差一點點」也會被交股。</p>
+<p><strong>與既有框架的整合限制：</strong>
+- <strong>兩種高檔的區分（呼應 3.2 與審閱項 8）：</strong> 震盪股觸波段壓力、KD/RSI 過熱<strong>預期回檔</strong> → 賣 CC 合理，租金肥且大概率保住股票；<strong>趨勢股創新高、RSI 高檔鈍化</strong> → 賣 CC 雖不會爆倉，卻高機率被 Call 走、放棄主升段。先分辨「過熱回檔」還是「鈍化續強」，再決定收不收這筆租。
+- <strong>財報/CPI/FOMC 前賣 CC 的雙面性（審閱項 9）：</strong> IV 飆高租金肥，但跳空大漲被交股機率同步飆高。核心愛股事件前賣 CC，Delta 退至 <strong>0.10–0.15</strong>（與 3.1 IV Rank 修正同邏輯），或跳過該週。
+- <strong>租金肥瘦看 IV Rank 不看 K 線高度（審閱項 11）：</strong> 權利金貴的來源是波動預期（IV），不是股價位置本身。
+- <strong>CC 不是下檔保護：</strong> 崩跌時權利金僅微幅緩衝（呼應 LEAPS 紀律⑥），下檔防護靠 4.8 對沖工具。</p>
+<h3 id="sec-33">4.4.2 Covered Call 的邏輯張力與實務難點（v3.2 新增）</h3>
+<p><strong>策略邏輯層面的三項張力：</strong></p>
+<p><strong>(1) 與成長股持股邏輯的根本矛盾（最重要）。</strong> 持有 NVDA/AMD/MU 的理由是相信大週期帶來<strong>右偏報酬</strong>——漲幅集中在少數大漲日；而 CC 的本質是<strong>賣出右尾</strong>，恰好賣掉持有的理由。長期統計（如 BXM 指數研究）顯示 CC 在強勢多頭中系統性跑輸單純持有，標的越右偏落後越多。<strong>定位修正：CC 適合 ETF 與「不再期待暴漲、但不想賣」的成熟持股；核心愛股僅在本來就設好的停利價使用強迫停利式 CC。</strong> 環流圖第三步（超買賣 CC）對趨勢愛股須極度節制——趨勢股的「超買」往往就是主升段本身。</p>
+<blockquote class="example">
+<p>💡 白話例：你買樂透就是為了那個頭獎，卻先把「中頭獎的獎金領取權」用 50 元賣給別人——收租收得很開心，開獎那天才發現賣掉的正是你買它的理由。</p>
+</blockquote>
+<p><strong>(2) Roll 的無限展期陷阱。</strong> 「Roll up &amp; out 收淨權利金」單次成立，但沒有邏輯終點——股價持續噴出時，每次 Roll 都在用更長時間鎖更多義務，本質是拒絕承認被交股。<strong>紀律：連續 Roll 兩次＝策略失效，讓股票被 Call 走或買回認賠，不把一筆收租變成永久追價。</strong></p>
+<p><strong>(3) 租金緩衝造成的停損麻痺。</strong> 現股跌 15% 時，「這個月又收了 1.5% 租金」的帳面會產生虛假安全感、延遲現股停損。<strong>CC 部位的風險 95% 在現股，權利金是雜訊——現股的技術停損條件不因收租而放寬。</strong></p>
+<p><strong>實務操作的六項難點：</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>#</th>
+<th>難點</th>
+<th>說明與對策</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td><strong>資金門檻</strong></td>
+<td>1 口 CC＝100 股現股，核心標的動輒 $15,000–30,000+；融資買的現股跌價時，租金無法對沖保證金螺旋。PMCC 替代方案資金降至約 1/3，但需 <strong>L3 權限</strong>、長腳有 Vega 暴露，崩盤時長短腳齊跌，比真 CC 脆弱</td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>財報與 30–45 DTE 幾乎必然重疊</strong></td>
+<td>美股季報頻率下，約每兩輪合約就橫跨一次財報。<strong>建倉前先查財報日曆是常態流程</strong>，不是例外處理</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>套牢後的履約價兩難（Wheel 斷點）</strong></td>
+<td>90 接股後跌到 70：履約價設成本之上→權利金趨零收租失效；設成本之下→反彈被 Call 走＝主動鎖定虧損。紀律：只在反彈至壓力位時賣、<strong>履約價永不低於持股成本</strong>、現股停損優先於繼續收租</td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>遠 OTM 流動性</strong></td>
+<td>Delta 0.10–0.20 合約買賣價差比例極寬，市價單直接吃掉數週報酬。<strong>一律限價掛中間價</strong>，不成交寧可放棄該輪</td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>零股無法覆蓋</strong></td>
+<td>180 股只能賣 1 口，80 股裸露；定期定額零股須湊滿整百才解鎖</td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>稅務摩擦（提示，非稅務建議）</strong></td>
+<td>台灣投資人美股選擇權損益屬海外所得計入最低稅負制；被 Call 走＝實現整段資本利得，頻繁指派＝頻繁實現損益，與長抱遞延相反。門檻與申報請洽會計師</td>
+</tr>
+</tbody>
+</table></div>
+<h3 id="sec-34">4.4.3 小資族適配路徑：單筆投入 ≤ $1,000 的現實（v3.2 新增）</h3>
+<p><strong>核心結論：在單筆 ≤ $1,000 的資金規模下，整個賣方收租體系（CC / CSP / Wheel）尚未解鎖——它們是「資產達標後的模組」，不是現在的工具。強行使用只有一條路可走，而那條路正是框架明文禁止的。</strong></p>
+<p><strong>各策略可行性總表：</strong></p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>策略</th>
+<th>資金需求</th>
+<th>單筆 ≤ $1,000 可行？</th>
+<th>說明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Covered Call</td>
+<td>100 股現股（核心標的 $10,000+）</td>
+<td>❌</td>
+<td>需累積 10 次以上投入才湊滿一口的底倉</td>
+</tr>
+<tr>
+<td><strong>CSP</strong></td>
+<td>履約價 × 100 現金</td>
+<td>⚠️ <strong>危險陷阱</strong></td>
+<td>$1,000 只夠賣履約價 ≤ $10 的 Put → 標的池只剩低價投機股，<strong>直接違反 Beta 分層「投機小型股不適用賣方框架」</strong>。資金限制會把你推向最不該用此策略的標的——明確禁止</td>
+</tr>
+<tr>
+<td>PMCC</td>
+<td>Deep ITM LEAPS 數千美元＋L3</td>
+<td>❌</td>
+<td>超出單筆預算</td>
+</tr>
+<tr>
+<td>信用價差（窄寬度）</td>
+<td>$1–2.5 寬度最大虧損 $100–250</td>
+<td>⚠️ 技術上可行</td>
+<td>需 L3 權限；手續費＋滑價對 $30–80 的權利金佔比 5–15%，期望值被顯著侵蝕</td>
+</tr>
+<tr>
+<td>借方價差</td>
+<td>淨成本 $200–500</td>
+<td>✅ 有限可行</td>
+<td>風險封頂、符合預算；同樣需價差權限與流動性紀律</td>
+</tr>
+<tr>
+<td>單腿 Long Call/Put</td>
+<td>權利金 $100–1,000</td>
+<td>✅ 但受框架約束</td>
+<td>只在 IV Rank &lt; 30 且依七步驟；避免短天期深 OTM 樂透化</td>
+</tr>
+<tr>
+<td><strong>零股累積現股</strong></td>
+<td>任意金額</td>
+<td>✅ <strong>主軸</strong></td>
+<td>無 Greeks、無到期日、無權限門檻</td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>小帳戶與 5% 部位規則的結構性衝突：</strong> 5% 規則反推——單筆 $1,000 需要 $20,000 帳戶才合規。若總資產低於此，<strong>一口選擇權的權利金往往就超標</strong>，等於規則被迫違反。這正是小帳戶更應該只用「風險封頂、金額可切小」結構（零股、窄價差）的數學理由，而不是「錢少所以賭大一點」的相反結論。</p>
+<blockquote class="example">
+<p>💡 白話例：5% 規則像安全帽，小資族的頭比較小不代表可以不戴——是要找到夠小的帽子（零股、$200 的窄價差），而不是乾脆裸騎。</p>
+</blockquote>
+<p><strong>建議路徑（解鎖門檻明確化）：</strong></p>
+<ol>
+<li><strong>現階段主軸：</strong> 每月 ≤ $1,000 零股定期定額累積核心愛股/ETF 現股——這就是「持續買進」，不需要選擇權也在執行資產配置。</li>
+<li><strong>練手額度：</strong> 若已取得價差權限，每月至多 1 組淨成本 ≤ $300 的借方價差，目的是<strong>用真錢學 Greeks 與出場紀律</strong>，不是創造報酬；虧損視為學費，計入樂透倉 $2,000 總上限。</li>
+<li><strong>解鎖門檻 A（Covered Call）：</strong> 單一標的現股滿 <strong>100 股</strong> → 啟用 4.4.1 全套流程。</li>
+<li><strong>解鎖門檻 B（CSP / Wheel）：</strong> 現金儲備 ≥ <strong>目標履約價 × 100</strong> 且該標的屬 Beta 分層合格名單 → 啟用賣方框架。</li>
+<li><strong>在達標之前，看到「小資也能收租」的內容一律先對照本節可行性總表</strong>——多數是把你推向低價投機股或過度槓桿的行銷語言。</li>
+</ol>
+<h3 id="sec-35">4.5 LEAPS vs 槓桿 ETF vs 正股</h3>
+<p>有效槓桿＝<strong>Delta ×（股價 ÷ 權利金）</strong>；LEAPS 僅損耗極低的 Theta，槓桿 ETF 有 Beta Decay 與路徑依賴。</p>
+<p><strong>六大紀律：</strong> ① 絕不以槓桿 ETF 為標的（要做 NVDX 就買現股，絕不買它的選擇權）② 限大市值龍頭 20–30 檔、小型股樂透上限 $2,000 ③ 12–24 月、Delta 0.7–0.8、IV Percentile &lt; 35% ④ 財報前兩週禁入 ⑤ 30% 分批 ⑥ 「虧損鎖定」≠低風險——現股跌 30%，LEAPS 帳面常跌 60–80%。</p>
+<blockquote class="example">
+<p>💡 白話例：LEAPS 像簽兩年長租約住進「幾乎等於買下」的房子（Deep ITM），月折舊極低；槓桿 ETF 像每天退房重新入住的旅館，天天付手續成本，住越久越吃虧。而在「槓桿 ETF 的選擇權」上做 LEAPS，是在旅館裡再轉租——成本疊成本，三重絞殺。</p>
+</blockquote>
+<p><strong>環流：</strong> Sell Put（超賣收租/接股）→ LEAPS Call（趨勢確立）→ Covered Call（超買降成本）。<strong>適用前提（v3.2 加註）：此環流是資產達標後的模組——需現金 ≥ 履約價 × 100（左側）與單一標的滿 100 股（上方）；小資階段的對應版本是「零股定期定額 → 湊滿門檻 → 逐步啟用」，見 4.4.3。</strong></p>
+<h3 id="sec-36">4.6 財報事件策略</h3>
+<p>Iron Condor／遠 Delta Bull Put Spread 財報前收割 IV；財報前 1–2 日出場賺 Drift＋IV 溢價；LEAPS 等 IV Crush 完成後進；<strong>財報前買 Call 禁止</strong>——IV 90% → 40–50%，股價漲 8% 也可能被 Vega 損失吃光。<strong>若判斷後仍決定過財報（Plan B）：改用價差結構</strong>——Short leg 的負 Vega 抵消部分 IV Crush 損失，且最大虧損事先鎖定。</p>
+<blockquote class="example">
+<p>💡 白話例：開獎前彩券被炒到天價（IV 90%）。就算你猜中號碼（股價漲 8%），你是用十倍價買的彩券——獎金扣掉炒價，可能還倒虧。<strong>聰明人開獎前把炒高的彩券賣掉，或乾脆當賣彩券的人。</strong></p>
+</blockquote>
+<h3 id="sec-37">4.7 機構 vs 散戶 ATM Call（勿盲跟單）</h3>
+<p>機構有現股當底，買 ATM Call 是「加菜」；散戶裸跟是「純賭時間」，橫盤即歸零。<strong>跟多請用現股或 ITM Delta 0.7+。</strong></p>
+<blockquote class="example">
+<p>💡 白話例：房東本來就有十間房，加買一張裝修期權是錦上添花；你沒房卻跟著買同一張期權，裝修沒動工（橫盤）你就血本無歸——同一張單，不同的人買，風險完全不同。</p>
+</blockquote>
+<h3 id="sec-38">4.8 對沖工具</h3>
+<p>大部位（$50k+）單買 OTM Put（3–4%）；中小部位 <strong>Bear Put Spread</strong>（1.4–1.8%，成本砍半）；深 OTM 買方部位直接出場；高 Beta 半導體用 SOXX Put 比 QQQ 精準。<strong>對沖支出 ≤ 部位 2%。</strong></p>
+<hr/>
+<h2 class="m-risk" id="sec-39">五、風險控管原則</h2>
+<h3 id="sec-40">5.1 部位規模</h3>
+<p>單筆 ≤ 總資金 5%（多部位總歸零風險 12–20% 內）；<strong>先 1 口試水溫再分批</strong>；小型股樂透上限 $2,000；CSP 留足履約價 × 100 × 口數現金。</p>
+<blockquote class="example">
+<p>💡 白話例：賭場再有把握也只帶零用錢進場——5% 上限的意義是<strong>連輸十次都還活著</strong>，活著才有下一次。</p>
+</blockquote>
+<h3 id="sec-41">5.2 停損與出場</h3>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>部位</th>
+<th>規則</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>短天期買方</td>
+<td>虧 50% 評估、<strong>60% 無條件全出</strong>；thesis broken 即全出</td>
+</tr>
+<tr>
+<td>所有買方</td>
+<td>時間停損：剩 30% 存續期強制評估</td>
+</tr>
+<tr>
+<td>買方（含借方價差）</td>
+<td><strong>絕不持有到到期日</strong>——末段 Theta 衝刺侵蝕殘值、部位淪為純賭博；獲利 50%+ 分批落袋</td>
+</tr>
+<tr>
+<td>賣方（信用價差/CSP/CC）</td>
+<td><strong>同樣提前平倉，但理由不同</strong>：末段 Theta 其實對賣方有利，提前買回是為了規避 <strong>Gamma 風險與指派風險</strong>（呼應 5.4 當日到期 ITM 教訓）——殘餘的一點權利金不值得承擔到期日的跳動風險</td>
+</tr>
+<tr>
+<td>事件部位</td>
+<td>依事件日錨定：大漲出 50%、小漲出 1/3、跌破 thesis 價全出、財報前不達標不賭</td>
+</tr>
+<tr>
+<td>CSP</td>
+<td>獲利 50% 平倉</td>
+</tr>
+<tr>
+<td>Covered Call</td>
+<td>獲利 50–90% 依效率平倉（4.4.1）；除息週檢查 ITM 提前指派</td>
+</tr>
+<tr>
+<td>Bull Put Spread</td>
+<td>破支撐立即平倉；財報後跳空漲以 ~80% 最大獲利買回</td>
+</tr>
+<tr>
+<td>LEAPS</td>
+<td>周線結構裁決</td>
+</tr>
+</tbody>
+</table></div>
+<blockquote class="example">
+<p>💡 白話例：買方像看電影——開演半小時確定難看就離場（價格停損），且再好看也別坐到最後一秒（末段 Theta 加速蒸發你的票值）。賣方像保險公司——保單只剩最後幾天、保費都快收完了，此時最怕的不是時間而是<strong>臨門一腳的意外</strong>（Gamma/指派），提前解約落袋，別為最後幾塊錢站在鐵軌上。</p>
+</blockquote>
+<h3 id="sec-42">5.3 統計心理紀律</h3>
+<p>50 筆交易出現連 4 輸的機率約 <strong>70%</strong>（動態規劃計算，≠ 指定某 4 筆連輸的 0.45⁴＝4.1%）。連輸先查有無違規，而非棄用策略。</p>
+<blockquote class="example">
+<p>💡 白話例：擲硬幣 50 次，中途出現連 4 次反面很正常——你不會因此說硬幣壞了。部位上限就是為了讓你撐過這段必然出現的反面連線。</p>
+</blockquote>
+<h3 id="sec-43">5.4 保證金與帳戶生存</h3>
+<p><strong>超額流動性是生命線</strong>（實戰：$1,696 水位時大盤跌 22% 即遭強平，減倉拉回 $5,339）；<strong>當日到期雙腿 ITM 信用價差最高優先</strong>市價平倉；有保證金壓力史以 CSP/Bull Put Spread 替代裸賣；Firstrade 價差需 L3 權限、申請勾 Speculation 且財務資訊一致。</p>
+<blockquote class="example">
+<p>💡 白話例：超額流動性是水庫的安全水位——低於警戒線時，不是討論漲跌的時候，是立刻洩洪（減倉）的時候。</p>
+</blockquote>
+<h3 id="sec-44">5.5 最大可承受損失</h3>
+<p>買方＝權利金全額（進場即知）；信用價差＝寬度−權利金（1:8 下一次滿虧 ≈ 8 次滿賺）；CSP＝履約價−權利金（愛股前提使被指派可接受）；帳戶層級：回撤不得使超額流動性逼近零；<strong>接股不開心＝該標的不適用賣方框架</strong>。</p>
+<hr/>
+<h2 class="m-review" id="sec-45">六、複習重點摘要</h2>
+<ol>
+<li><strong>選擇權是正股的輔助工具，不是賭具</strong>——槓桿視合約而定（短天期 OTM 可達數十倍、Deep ITM LEAPS 約 2–3 倍但無每日重置損耗），靠它單獨致富＝風險同步放大；零和是合約數學，避險與收租在組合層面創造真實價值。</li>
+<li><strong>出錢的人講話：</strong> 買方付權利金換決定權（損失封頂、需方向+幅度+時間全對）；賣方收錢扛義務（Sell Call 被迫賣、<strong>Sell Put 被迫買</strong>——義務方向相反，勿混淆）。</li>
+<li><strong>賣方三軸引擎：</strong> Delta × IV Rank × Beta——一般 0.15–0.25、超賣（RSI&lt;30＋破布林下軌）上調 0.40、IV Rank 飆高反退 0.10–0.15；永遠避開 ATM 的 Gamma 懸崖。</li>
+<li><strong>RSI 雙情境：</strong> 跌深可接（均值回歸）、漲多不能空（鈍化＝強勢）。</li>
+<li><strong>資金流三關：</strong> 成交方向 → Vol/OI &gt; 2 → <strong>隔日 OI 確認</strong> → 股價最終確認；避險與做空訊號相同意圖不同；高位橫盤＋Put flow/IV/Skew 齊升＝嚴禁上調賣方 Delta。</li>
+<li><strong>IV Rank 定買賣方：</strong> &gt;70% 絕不裸買（用價差）、&lt;30% 買方優勢；財報前買 Call 禁止——猜對方向也會被 IV Crush 沒收獲利。</li>
+<li><strong>LEAPS 鐵律：</strong> 正股標的、Deep ITM 0.7–0.8、低 IV、財報前兩週禁入、絕不碰槓桿 ETF 選擇權。</li>
+<li><strong>出場雙軌邏輯：</strong> 買方絕不抱到到期（防 Theta 末段衝刺）、虧 50–60% 出、剩 30% 存續期評估；賣方同樣提前平倉但防的是 <strong>Gamma 與指派風險</strong>；獲利 50%（CSP）/50–90%（CC 依效率）平倉是紀律常數。</li>
+<li><strong>Covered Call 定位與提醒：</strong> CC 賣的是右尾——適合 ETF 與成熟持股，核心愛股只做強迫停利式；分辨「過熱回檔」vs「鈍化續強」再收租；事件週 Delta 退至 0.10–0.15 或跳過；配息股除息週檢查 ITM 提前指派；連續 Roll 兩次＝策略失效；現股停損不因收租放寬。</li>
+<li><strong>小資階段（單筆 ≤ $1,000）：</strong> 賣方收租體系尚未解鎖——CC 需 100 股、CSP 需履約價 × 100 現金，強行執行只會被推向低價投機股（明確禁止）。主軸＝零股定期定額累積現股；練手＝每月至多一組 ≤ $300 借方價差；達標後依 4.4.3 解鎖門檻逐步啟用。</li>
+<li><strong>連輸是常態（50 筆 ~70% 出現連 4 輸）</strong>，靠部位上限與超額流動性存活。</li>
+<li><strong>合理期望值：</strong> 「年度績效 50%」屬行銷語言；本框架追求的是高勝率收租＋有限次數的趨勢槓桿，以活得久換複利。</li>
+<li><strong>待補：</strong> VRVP、TD Sequential、AVWAP。</li>
+</ol>
+<hr/>
+<h2 class="m-appendix" id="sec-46">附錄一：選擇權在長期資產配置中的定位</h2>
+<p><strong>核心主張：選擇權是提升資金效率的中性工具，風險來自使用者的無知與貪婪，不是工具本身。</strong> 定位為正股／指數 ETF 長期部位的輔助——用 CSP 降低建倉成本、用 Covered Call 提高持有期收益、用 Put/價差在特定宏觀觸發下對沖，而非以裸買方向單為主體。</p>
+<blockquote class="example">
+<p>💡 白話例：選擇權之於股票投資，像電動輔助之於腳踏車——用得好省力爬坡（收租降成本），把它當重機催全油門（全倉裸買短天期 OTM 樂透單，槓桿可達數十倍），摔的就是你。</p>
+</blockquote>
+<h2 class="m-appendix" id="sec-47">附錄二：中壯年資產配置與省稅摘要（概念存目，非選擇權主體）</h2>
+<ul>
+<li><strong>核心公式：賺一元是名目、存一元才是真的</strong>——稅後可支配所得才是財富累積的分子；同樣 7% 年化、120 個月定投，月存 2 萬者終值（~344 萬）恰為月存 1 萬者（~172 萬）的兩倍，<strong>報酬率相同、本金決定終值</strong>。</li>
+<li><strong>好負債 vs 壞負債：</strong> 固定利率房貸/低利企業貸款在通膨下被稀釋（用越來越薄的錢還固定的債）＝好負債；高利信用卡債、消費性貸款＝壞負債。<strong>貸款投資（划算才做）可以，貸款消費不行。</strong><blockquote class="example">
+<p>💡 白話例：通膨 5%、房貸利率 3%——你欠的 100 萬十年後「實質」只剩約 60 萬購買力，通膨在幫你還債。</p>
+</blockquote>
+</li>
+<li><strong>抗通膨工具：</strong> TIPS、股息成長股、REITs、通膨連結年金（注意調整上限與費用）。</li>
+<li><strong>省稅工具（僅美國稅制）：</strong> DAF/Bunching 捐贈、529 教育計畫、Bonus Depreciation、預付長期合約鎖價。<strong>台灣稅務居民不適用，僅作概念參考，實作前諮詢會計師。</strong></li>
+</ul>
+<hr/>
+<p><em>下次「統整」或「更新筆記」時以本 v3.2 為基底遞增。</em></p>
+    </article>
+  </main>
+</div>
+<a class="backtop" href="#top" onclick="window.scrollTo({top:0});return false;">▲ TOP</a>
+</body>
+</html>
